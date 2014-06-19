@@ -5,77 +5,137 @@
 var stringifyJSON = function(obj) {
   // your code goes here
   //console.log(obj);
-  
+  	var sfier = new Stringifier();
 
-	var stringifier = {
-		token: null,
-		stringified: '',
-		stringify: function (token) {
-			var type = typeof token;
-			var str = '';
-			this.token = token;
-			
-			console.log(token);
+  	window.strif = Stringifier;
 
-			if (token === null) {
-				str += null;
-			}
+	function Stringifier () {
+		this.stringified = '';
+	}
 
-			if (type === 'boolean') {
-				this.stringifyBool();
-			}
-			if (type === 'string') {
-				this.stringifyStr();
+	Stringifier.prototype.stringify = function (token) {
+		var type = typeof token;
+		this.token = token;
 
-			} else if (type === 'number') {
-				this.stringifyNum();
-
-			} else if (token instanceof Array) {
-				this.stringifyArr();
-
-			} else if (type === 'object') {
-				this.stringifyObj();
-			}
-
-			
-			return this.stringified;
-
-		},
-
-		stringifyBool: function () {
-			this.stringified += this.token;
-		},
-
-		stringifyStr: function () {
-			this.stringified += "\"" + this.token + "\"";
-		},
-
-		stringifyNum: function () {
-			this.stringified += this.token;
-			
-		},
-
-		stringifyArr: function () {
-			var open = "[";
-			var close = "]";
-			var self = this;
-
-			var inner = this.token.map(function (item) {
-				return self.stringify(item);
-			}).join();
-			
-			console.log(this.stringified + '====' + inner);
-
-			this.stringified = open + inner + close;
-		},
-
-		stringifyObj: function () {
-
+		if (token === null) {
+			this.stringified += null;
 		}
+
+		if (type === 'boolean') {
+			this.stringifyBool();
+		}
+		if (type === 'string') {
+			this.stringifyStr();
+
+		} else if (type === 'number') {
+			this.stringifyNum();
+
+		} else if (token instanceof Array) {
+			this.stringifyArr();
+
+		} else if (type === 'object') {
+			this.stringifyObj();
+		}
+
+		return this.stringified;
+	};
+
+	Stringifier.prototype.stringifyBool = function () {
+		this.stringified += this.token;
+	};
+
+	Stringifier.prototype.stringifyStr = function () {
+		this.stringified += "\"" + this.token + "\"";
+	};
+
+	Stringifier.prototype.stringifyNum = function () {
+		this.stringified += this.token;
+	};
+
+	Stringifier.prototype.stringifyArr = function () {
+		var open = "[";
+		var close = "]";
+		var self = this;
+
+		var inner = this.token.map(function (item) {
+			var sfier = new Stringifier();
+			return sfier.stringify(item);
+		}).join();
+
+		this.stringified = open + inner + close;
+	};
+
+	Stringifier.prototype.stringifyObj = function () {
 
 	};
 
-	return stringifier.stringify(obj);
+
+	// var Stringifier = {
+	// 	token: null,
+	// 	stringified: '',
+	// 	stringify: function (token) {
+	// 		var type = typeof token;
+	// 		this.token = token;
+
+	// 		if (token === null) {
+	// 			this.stringified += null;
+	// 		}
+
+	// 		if (type === 'boolean') {
+	// 			this.stringifyBool();
+	// 		}
+	// 		if (type === 'string') {
+	// 			this.stringifyStr();
+
+	// 		} else if (type === 'number') {
+	// 			this.stringifyNum();
+
+	// 		} else if (token instanceof Array) {
+	// 			this.stringifyArr();
+
+	// 		} else if (type === 'object') {
+	// 			this.stringifyObj();
+	// 		}
+
+			
+	// 		return this.stringified;
+
+	// 	},
+
+	// 	stringifyBool: function () {
+	// 		this.stringified += this.token;
+	// 	},
+
+	// 	stringifyStr: function () {
+	// 		this.stringified += "\"" + this.token + "\"";
+	// 	},
+
+	// 	stringifyNum: function () {
+	// 		this.stringified += this.token;
+			
+	// 	},
+
+	// 	stringifyArr: function () {
+	// 		var open = "[";
+	// 		var close = "]";
+	// 		var self = this;
+
+	// 		var inner = this.token.map(function (item) {
+	// 			return self.stringify(item);
+	// 		}).join();
+			
+	// 		console.log(this.stringified + '====' + inner);
+
+	// 		this.stringified = open + inner + close;
+	// 	},
+
+	// 	stringifyObj: function () {
+
+	// 	}
+
+	// };
+
+	return sfier.stringify(obj);
   
 	
 };
