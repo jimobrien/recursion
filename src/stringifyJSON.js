@@ -11,20 +11,21 @@ var stringifyJSON = function(obj) {
 
 	function Stringifier () {
 		this.stringified = '';
-		//this.token = '';
+		this.token = '';
 	}
 
 	Stringifier.prototype.stringify = function (token) {
 		var type = typeof token;
 		this.token = token;
-		window.token = token;
 
 		console.log(token);
 
 		if (token === null) {
-			this.stringified += null;
+			this.stringifyNull();
+
 		} else if (type === 'boolean') {
 			this.stringifyBool();
+
 		} else if (type === 'string') {
 			this.stringifyStr();
 
@@ -35,11 +36,15 @@ var stringifyJSON = function(obj) {
 			this.stringifyArr();
 
 		} else if (type === 'object') {
-
 			this.stringifyObj();
+
 		}
 
 		return this.stringified;
+	};
+
+	Stringifier.prototype.stringifyNull = function () {
+		this.stringified = this.token + '';
 	};
 
 	Stringifier.prototype.stringifyBool = function () {
@@ -51,7 +56,7 @@ var stringifyJSON = function(obj) {
 	};
 
 	Stringifier.prototype.stringifyNum = function () {
-		this.stringified += this.token;
+		this.stringified = this.token + '';
 	};
 
 	Stringifier.prototype.stringifyArr = function () {
@@ -67,21 +72,28 @@ var stringifyJSON = function(obj) {
 	};
 
 	Stringifier.prototype.stringifyObj = function () {
-		var open ="{";
-		var close ="}";
+		var open = "{";
+		var close = "}";
 		var self = this;
 		
 		var inner = Object.keys(this.token).map(function (item) {
 			var stringifier = new Stringifier();
 			var key;
 			var val;
-			
-			key = stringifier.stringify(item);
-			val = stringifier.stringify(self.token[item]);
-			console.log(self.token[item]);
-			
-			return key + ':' + val;
-		}).join();
+
+			if (self.token[item] !== undefined && typeof self.token[item] != 'function') { // check for undefined or functions
+				key = stringifier.stringify(item);
+				val = stringifier.stringify(self.token[item]);
+				return key + ':' + val;
+			}
+
+		});
+
+		if (inner.indexOf(undefined) >-1) { // if undefined values are found, set inner to blank
+			inner = '';
+		} else {
+			inner = inner.join(); // otherwise join the array
+		}
 
 		this.stringified = open + inner + close;
 	};
