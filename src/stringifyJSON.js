@@ -5,26 +5,27 @@
 var stringifyJSON = function(obj) {
   // your code goes here
   //console.log(obj);
-  	var sfier = new Stringifier();
+  	var stringifier = new Stringifier();
 
   	window.strif = Stringifier;
 
 	function Stringifier () {
 		this.stringified = '';
+		//this.token = '';
 	}
 
 	Stringifier.prototype.stringify = function (token) {
 		var type = typeof token;
 		this.token = token;
+		window.token = token;
+
+		console.log(token);
 
 		if (token === null) {
 			this.stringified += null;
-		}
-
-		if (type === 'boolean') {
+		} else if (type === 'boolean') {
 			this.stringifyBool();
-		}
-		if (type === 'string') {
+		} else if (type === 'string') {
 			this.stringifyStr();
 
 		} else if (type === 'number') {
@@ -34,6 +35,7 @@ var stringifyJSON = function(obj) {
 			this.stringifyArr();
 
 		} else if (type === 'object') {
+
 			this.stringifyObj();
 		}
 
@@ -41,11 +43,11 @@ var stringifyJSON = function(obj) {
 	};
 
 	Stringifier.prototype.stringifyBool = function () {
-		this.stringified += this.token;
+		this.stringified = this.token + '';
 	};
 
 	Stringifier.prototype.stringifyStr = function () {
-		this.stringified += "\"" + this.token + "\"";
+		this.stringified = "\"" + this.token + "\"";
 	};
 
 	Stringifier.prototype.stringifyNum = function () {
@@ -55,18 +57,33 @@ var stringifyJSON = function(obj) {
 	Stringifier.prototype.stringifyArr = function () {
 		var open = "[";
 		var close = "]";
-		var self = this;
 
 		var inner = this.token.map(function (item) {
-			var sfier = new Stringifier();
-			return sfier.stringify(item);
+			var stringifier = new Stringifier();
+			return stringifier.stringify(item);
 		}).join();
 
 		this.stringified = open + inner + close;
 	};
 
 	Stringifier.prototype.stringifyObj = function () {
+		var open ="{";
+		var close ="}";
+		var self = this;
+		
+		var inner = Object.keys(this.token).map(function (item) {
+			var stringifier = new Stringifier();
+			var key;
+			var val;
+			
+			key = stringifier.stringify(item);
+			val = stringifier.stringify(self.token[item]);
+			console.log(self.token[item]);
+			
+			return key + ':' + val;
+		}).join();
 
+		this.stringified = open + inner + close;
 	};
 
 
@@ -135,7 +152,7 @@ var stringifyJSON = function(obj) {
 
 	// };
 
-	return sfier.stringify(obj);
+	return stringifier.stringify(obj);
   
 	
 };
