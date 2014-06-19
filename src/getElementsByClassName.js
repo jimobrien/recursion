@@ -8,15 +8,19 @@
 var getElementsByClassName = function(className){
   var elements = [];
 
-  // start by searching a given node (begin with document)
-  // check if child has class
-  	// push if it does
-  // check if child has children
-  // repeat
-  
+  searchNode(document);
+
   function searchNode(node) {
     var children = node.childNodes;
     
+    for (var i = 0, len = children.length; i < len; i++) {
+      if (children[i].classList && children[i].classList.contains(className)) {
+        elements.push(children[i]);
+      }
+      if (children[i].hasChildNodes()) {
+        searchNode(children[i]);
+      }
+    }
   }
 
   return elements;
