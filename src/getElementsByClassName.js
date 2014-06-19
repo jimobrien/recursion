@@ -4,6 +4,15 @@
 // };
 
 // But instead we're going to implement it from scratch:
+
 var getElementsByClassName = function(className){
-  // your code here
+  var elements = [];
+
+  function searchNode(node) {
+    var children = node.childNodes;
+    
+  }
+
+  return elements;
+
 };
